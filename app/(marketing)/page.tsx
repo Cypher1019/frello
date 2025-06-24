@@ -1,4 +1,6 @@
+import { Button } from "@/components/ui/button";
 import { Medal } from "lucide-react";
+import Link from "next/link";
 
 const MarketingPage = () => {
   return (
@@ -19,6 +21,11 @@ const MarketingPage = () => {
       <div className="text-sm md:text-xl text-neutral-400 mt-4 max-w-xs md:max-w-2xl text-center mx-auto">
         Collaborate , Manage Projects and Reach new Productivity Peaks. From high rises to the Home Office, the way your team works is unique - accomplish it all with Frello.
       </div>
+      <Button className = "mt-6" size="lg" asChild>
+        <Link href="/sign-up">
+            Get Frello for Free
+        </Link>
+      </Button>
     </div>
   );
 };
