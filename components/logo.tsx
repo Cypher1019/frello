@@ -18,7 +18,7 @@ export const Logo = () => {
                     height={35}
                     width={35}
                 />
-                <p className={cn("text-lg text-neutral-700 pb-1",
+                <p className={cn("text-lg text-neutral-700 pb-1 pb- pt-3",
                     headingFont.className
                 )}>
                     Frello
