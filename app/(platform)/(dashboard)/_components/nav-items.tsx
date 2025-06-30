@@ -120,5 +120,5 @@ NavItem.Skeleton = function SkeletonNavItem () {
             </div>
             <Skeleton className="h-10 w-full" />
         </div>
-    )
-}
+    );
+};
