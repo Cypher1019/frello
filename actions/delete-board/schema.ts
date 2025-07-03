@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const UpdateBoard = z.
+export const DeleteBoard = z.
 object ({
     id: z.string(),
 });    
