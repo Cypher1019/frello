@@ -1,11 +1,13 @@
-"use client";
+
 import { FormPopover } from "@/components/form/form-popover";
 import { Hint } from "@/components/hint";
 import { HelpCircle, User2 } from "lucide-react";
-import { useState } from "react";
+
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export const BoardList = async () => {
     const { orgId } = await auth();
@@ -24,11 +26,7 @@ export const BoardList = async () => {
     });
 
 
-    const [isChecked, setIsChecked] = useState(false); // Example state for checkboxes
-
-    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsChecked(event.target.checked);
-    };
+   
 
     return (
         <div className="space-y-4">
@@ -37,7 +35,19 @@ export const BoardList = async () => {
                 Your Boards
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {/* FormPopover is likely to contain interactive form elements */}
+                {boards.map((board) => (
+                    <Link
+                        key={board.id}
+                        href ={`/board/${board.id}`}
+                        className="group relative aspect-video bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-full w-full p-2 overflow-hidden"
+                        style={{backgroundImage: `url(${board.imageThumbUrl})`}}
+                    >
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition" />
+                        <p className="relative font-semibold text-white">
+                            {board.title}
+                        </p>
+                    </Link>
+                ))}
                 <FormPopover sideOffset={10} side="right">
                     <div
                         role="button"
@@ -58,16 +68,26 @@ export const BoardList = async () => {
                             />
                         </Hint>
 
-                        {/* Example of adding a checkbox with checked state */}
-                        <input
-                            type="checkbox"
-                            checked={isChecked} // Ensure the `checked` prop is controlled
-                            onChange={handleCheckboxChange} // Make sure you provide an `onChange` handler
-                            className="absolute top-2 right-2 h-4 w-4"
-                        />
+                        
                     </div>
                 </FormPopover>
             </div>
+        </div>
+    );
+};
+
+
+BoardList.Skeleton = function SkeletonBoardList () {
+    return (
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
+            <Skeleton className="aspect-video h-full w-full p-2" />
         </div>
     );
 };
