@@ -1,5 +1,6 @@
 "use client";
 
+import { updateCardOrder } from "@/actions/update-card-order";
 import { useAction } from "@/hooks/use-action";
 import { updateListOrder } from "@/actions/update-list-order";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd"; 
@@ -32,6 +33,15 @@ export const ListContainer = ({
     const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
         onSuccess: () => {
             toast.success("List reordered");
+        },
+        onError: (error) => {
+            toast.error(error);
+        },
+    });
+
+    const { execute: executeUpdateCardOrder } = useAction(updateCardOrder, {
+        onSuccess: () => {
+            toast.success("Card reordered");
         },
         onError: (error) => {
             toast.error(error);
@@ -100,6 +110,10 @@ export const ListContainer = ({
                 sourceList.cards = reorderedCards;
 
                 setOrderedData(newOrderedData);
+                executeUpdateCardOrder({
+                    boardId: boardId,
+                    items: reorderedCards,
+                });
             }  else {
 
                const [movedCard] = sourceList.cards.splice(source.index, 1);
@@ -117,7 +131,10 @@ export const ListContainer = ({
                });
 
                setOrderedData(newOrderedData);
-
+               executeUpdateCardOrder({
+                boardId: boardId,
+                items: destList.cards,
+               });
             }
 
         }
