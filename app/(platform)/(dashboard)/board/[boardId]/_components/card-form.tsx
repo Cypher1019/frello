@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useAction } from "@/hooks/use-action";
 import { createCard } from "@/actions/create-card";
 import { useRef, ElementRef, KeyboardEventHandler, forwardRef } from "react";
@@ -17,7 +18,7 @@ interface CardFormProps {
     isEditing: boolean;
 };
 
-export const CardForm = forwardRef<HTMLAreaElement, CardFormProps> (({
+export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps> (({
     listId,
     enableEditing,
     disableEditing,
@@ -26,7 +27,12 @@ export const CardForm = forwardRef<HTMLAreaElement, CardFormProps> (({
     const params = useParams();
     const formRef = useRef<ElementRef<"form">>(null);
 
-    const { execute, fieldErrors } = useAction(createCard);
+    const { execute, fieldErrors } = useAction(createCard, {
+        onSuccess: (data) => {
+            toast.success(`Card "${data.title}" created`);
+            formRef.current?.reset();
+        }
+    });
 
     const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === "Escape"){
@@ -47,7 +53,7 @@ export const CardForm = forwardRef<HTMLAreaElement, CardFormProps> (({
     const onSubmit = (formData: FormData) => {
         const title = formData.get("title") as string;
         const listId = formData.get("listId") as string;
-        const boardId = formData.get("boardId") as string;
+        const boardId = params.boardId as string;
 
         execute({title, listId, boardId});
     };
