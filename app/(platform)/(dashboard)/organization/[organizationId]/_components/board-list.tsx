@@ -2,7 +2,8 @@
 import { FormPopover } from "@/components/form/form-popover";
 import { Hint } from "@/components/hint";
 import { HelpCircle, User2 } from "lucide-react";
-
+import { MAX_FREE_BOARDS } from "@/constants/boards";
+import { getAvailableCount } from "@/lib/org-limit";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
@@ -25,7 +26,7 @@ export const BoardList = async () => {
         }
     });
 
-
+    const availableCount = await getAvailableCount();
    
 
     return (
@@ -57,7 +58,7 @@ export const BoardList = async () => {
                             Create new board
                         </p>
                         <span className="text-xs">
-                            5 Remaining
+                            {`${MAX_FREE_BOARDS - availableCount} remaining`}
                         </span>
                         <Hint
                             sideOffset={40}
