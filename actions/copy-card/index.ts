@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CopyCard } from "./schema";
 import { title } from "process";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -53,6 +55,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
                 listId: cardToCopy.listId,
             },
         });
+
+        await createAuditLog({
+            entityTitle: card.title,
+            entityId: card.id,
+            entityType: ENTITY_TYPE.CARD,
+            action: ACTION.CREATE,
+        })
     } catch (error) {
         return{
             error:"Failed to copy."

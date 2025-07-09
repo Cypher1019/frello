@@ -6,6 +6,8 @@ import { db } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateBoard } from "./schema";
+import { createAuditLog } from "@/lib/create-audit-log";
+import { ACTION, ENTITY_TYPE } from "@prisma/client";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
   // Log the input data for debugging
@@ -69,6 +71,12 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageLinkHTML,
       }
     });
+    await createAuditLog({
+                entityTitle: board.title,
+                entityId: board.id,
+                entityType: ENTITY_TYPE.BOARD,
+                action: ACTION.CREATE,
+     })
 
     // Log the created board object
     console.log("Board created successfully:", board);
